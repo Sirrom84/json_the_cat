@@ -1,16 +1,17 @@
 const request = require('request');
 
-const breedFinder = (userInput) => {
-  userInput.toLowerCase();
-  request(`https://api.thecatapi.com/v1/breeds/search?q=${userInput}`, (error, response, body) => {
-    if (error) {
-      console.error('error:', error);
-    }   
+const fetchBreedDescription = (breedName, callback) => {
+  request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName.toLowerCase()}`, (error, response, body) => {
     const data = JSON.parse(body);
-    console.log(data[0].description);
-   }); 
+  
+    if (error) {
+      return  callback(error);
+    }
+    return callback(null,data[0].description);
+  });
 };
 
-breedFinder(process.argv[2]);
 
+
+module.exports = { fetchBreedDescription };
 
